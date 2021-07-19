@@ -8,6 +8,7 @@
 # que aparecen en verde con el hashtag "#"
 
 import json
+from typing import KeysView
 import requests
 
 import matplotlib.pyplot as plt
@@ -45,5 +46,30 @@ if __name__ == '__main__':
     # para imprimir cuantos títulos completó cada usuario
     # y verifique si los primeros usuarios (mirando la página a ojo)
     # los datos recolectados son correctos.
+
+    with open ("mi_json2.json", "w") as jsonfile:
+        response = requests.get("https://jsonplaceholder.typicode.com/todos")
+        data = response.json()
+        json.dump(data, jsonfile, indent = 4)
+
+    user_true = [x.get('userId') for x in data if x['completed'] == True ]
+    print (user_true)
+    
+    count = {x:user_true.count(x) for x in user_true}
+    print (count)
+
+    keys = [x for x in count]
+    print (keys)
+
+    values = [count.get(x, "") for x in keys]
+    print (values)
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    ax.bar(keys, values, label='cantidad')
+    ax.legend()
+    plt.show()
+
 
     print("terminamos")
